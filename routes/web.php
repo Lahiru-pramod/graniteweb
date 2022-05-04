@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
+
+Route::get('home',[App\Http\Controllers\granitewebcontroller::class, 'home']);
+Route::get('ourwork',[App\Http\Controllers\granitewebcontroller::class, 'ourwork']);
