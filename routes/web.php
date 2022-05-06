@@ -1,6 +1,9 @@
 <?php
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use App\Http\Controllers\granitewebcontroller;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +17,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('index');
+    return Inertia::render('index', [
+        'canLogin' => Route::has('index'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
 
-Route::get('home',[App\Http\Controllers\granitewebcontroller::class, 'home']);
-Route::get('ourwork',[App\Http\Controllers\granitewebcontroller::class, 'ourwork']);
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/index', function () {
+        return Inertia::render('index');
+    })->name('index');
+});
+
+Route::resource("index",granitewebcontroller::class);
